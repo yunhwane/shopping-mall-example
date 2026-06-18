@@ -85,9 +85,31 @@ tasks.jacocoTestReport {
         ),
     )
 }
-// ponytail: report only, no coverage gate (jacocoTestCoverageVerification) until
-// real domain code exists. See docs/adr/0002-coverage-strategy.md — gate becomes
-// per-module absolute thresholds (ratcheted) when the first module lands.
+// ponytail: one repo-wide instruction floor now that the first module (catalog)
+// landed. Splits to per-module absolute thresholds at module #2.
+// See docs/adr/0002-coverage-strategy.md.
+tasks.jacocoTestCoverageVerification {
+    dependsOn(tasks.test)
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) { exclude("**/ShoppingMallApplication*") }
+            },
+        ),
+    )
+    violationRules {
+        rule {
+            limit {
+                counter = "INSTRUCTION"
+                minimum = "0.70".toBigDecimal()
+            }
+        }
+    }
+}
+
+tasks.check {
+    dependsOn(tasks.jacocoTestCoverageVerification)
+}
 
 ktlint {
     version.set("1.6.0")
