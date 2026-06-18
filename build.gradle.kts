@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "2.3.21"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
+    jacoco
 }
 
 group = "com.example"
@@ -62,7 +63,31 @@ allOpen {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
+
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    // Coverage measures logic we wrote, not framework wiring — exclude the bootstrap class.
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) { exclude("**/ShoppingMallApplication*") }
+            },
+        ),
+    )
+}
+// ponytail: report only, no coverage gate (jacocoTestCoverageVerification) until
+// real domain code exists. See docs/adr/0002-coverage-strategy.md — gate becomes
+// per-module absolute thresholds (ratcheted) when the first module lands.
 
 ktlint {
     version.set("1.6.0")
