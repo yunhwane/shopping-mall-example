@@ -76,9 +76,18 @@ tasks.jacocoTestReport {
         xml.required = true
         html.required = true
     }
+    // Coverage measures logic we wrote, not framework wiring — exclude the bootstrap class.
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) { exclude("**/ShoppingMallApplication*") }
+            },
+        ),
+    )
 }
 // ponytail: report only, no coverage gate (jacocoTestCoverageVerification) until
-// real domain code exists — a threshold on an empty codebase is a meaningless number.
+// real domain code exists. See docs/adr/0002-coverage-strategy.md — gate becomes
+// per-module absolute thresholds (ratcheted) when the first module lands.
 
 ktlint {
     version.set("1.6.0")
