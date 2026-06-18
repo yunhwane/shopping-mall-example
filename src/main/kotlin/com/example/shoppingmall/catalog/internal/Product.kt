@@ -1,5 +1,6 @@
 package com.example.shoppingmall.catalog.internal
 
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
@@ -25,6 +26,9 @@ class Product(
             require(value.isNotBlank()) { "product name must not be blank" }
             field = value
         }
+
+    // numeric(12,2): two decimals, single currency. See ADR-0004.
+    @Column(precision = 12, scale = 2)
     var price: BigDecimal = price
         set(value) {
             require(value >= BigDecimal.ZERO) { "product price must not be negative" }

@@ -1,6 +1,11 @@
 spring:
   application:
     name: shopping-mall
+  jpa:
+    hibernate:
+      # Flyway owns the schema; Hibernate validates entities against it, never
+      # mutates. See docs/adr/0004-relational-postgres-system-of-record.md.
+      ddl-auto: validate
   mvc:
     problemdetails:
       enabled: true   # render framework exceptions (e.g. 404) as RFC 9457 ProblemDetail
