@@ -1,3 +1,6 @@
 spring:
   application:
     name: shopping-mall
+  modulith:
+    events:
+      republish-outstanding-events-on-restart: true
