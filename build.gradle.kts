@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "2.3.21"
     id("org.jlleitschuh.gradle.ktlint") version "12.1.2"
+    jacoco
 }
 
 group = "com.example"
@@ -62,7 +63,22 @@ allOpen {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
+
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+// ponytail: report only, no coverage gate (jacocoTestCoverageVerification) until
+// real domain code exists — a threshold on an empty codebase is a meaningless number.
 
 ktlint {
     version.set("1.6.0")
