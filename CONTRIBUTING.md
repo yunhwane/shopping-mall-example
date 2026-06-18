@@ -27,5 +27,8 @@ Solo project, GitHub Flow. Humans and AI agents follow the same loop.
 ## Local check before pushing
 
 ```
-./gradlew build
+./gradlew ktlintFormat build
 ```
+
+`ktlintFormat` auto-fixes style; `build` runs the ktlint check, kotest/JUnit
+tests, and the `ModularityTests` boundary check — the same gate CI enforces.
