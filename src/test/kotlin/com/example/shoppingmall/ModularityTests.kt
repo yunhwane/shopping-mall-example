@@ -2,9 +2,9 @@ package com.example.shoppingmall
 
 import org.junit.jupiter.api.Test
 import org.springframework.modulith.core.ApplicationModules
+import org.springframework.modulith.docs.Documenter
 
 class ModularityTests {
-
     private val modules = ApplicationModules.of(ShoppingMallApplication::class.java)
 
     // Fails the build if any module reaches into another's internals.
@@ -17,7 +17,7 @@ class ModularityTests {
     // Handy when explaining the architecture; delete if it ever gets noisy.
     @Test
     fun writesDocumentation() {
-        org.springframework.modulith.docs.Documenter(modules)
+        Documenter(modules)
             .writeModulesAsPlantUml()
             .writeIndividualModulesAsPlantUml()
     }
