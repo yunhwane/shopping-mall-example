@@ -9,10 +9,16 @@ any threshold would be a meaningless number that only generates ceremony.
 
 - **Now (signal):** report only, build never fails on coverage. Watch the trend.
 - **When the first real module lands (gate):** add
-  `jacocoTestCoverageVerification` with a **per-module rule** (one `rule` per
-  top-level package, e.g. `com.example.shoppingmall.order.*`) at a conservative
-  absolute threshold (~70% line), then **ratchet it upward** as the module
-  matures.
+  `jacocoTestCoverageVerification` and wire it into `check`.
+
+### Update — first module (`catalog`) landed
+
+The gate is on, but as **one repo-wide floor** (instruction coverage ≥ 0.70,
+bootstrap class excluded), *not* a per-module rule. With a single module a
+per-package rule and a repo-wide rule are identical, so the lazier form wins.
+The split to **per-module absolute thresholds** (one `rule` per top-level
+package, ratcheted upward) happens when the **second** module lands — that's the
+first point a per-module rule does anything a repo-wide floor doesn't.
 
 Because every module is greenfield, a per-module *absolute* threshold is, in
 practice, new-code coverage — there is no legacy to drag the number down. That
