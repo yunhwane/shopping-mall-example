@@ -1,6 +1,9 @@
 spring:
   application:
     name: shopping-mall
+  mvc:
+    problemdetails:
+      enabled: true   # render framework exceptions (e.g. 404) as RFC 9457 ProblemDetail
   modulith:
     events:
       republish-outstanding-events-on-restart: true
